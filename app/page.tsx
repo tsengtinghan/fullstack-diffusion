@@ -1,61 +1,46 @@
 'use client';
-import { useState, FormEvent } from "react";
+import { useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 
-// Define TypeScript interfaces for the predictions and errors
-interface Prediction {
-  id: string;
-  status: "succeeded" | "failed" | "pending";
-  detail?: string;
-  output?: string[];
-}
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-interface Error {
-  detail: string;
-}
+export default function Home() {
+  const [prediction, setPrediction] = useState(null);
+  const [error, setError] = useState(null);
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const Home: React.FC = () => {
-  const [prediction, setPrediction] = useState<Prediction | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const target = e.target as typeof e.target & {
-      prompt: { value: string };
-    };
     const response = await fetch("/api/predictions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt: target.prompt.value,
+        prompt: e.target.prompt.value,
       }),
     });
-
-    let predictionResponse = await response.json() as Prediction;
+    let prediction = await response.json();
     if (response.status !== 201) {
-      setError(predictionResponse.detail || "Unknown error");
+      setError(prediction.detail);
       return;
     }
-    setPrediction(predictionResponse);
+    setPrediction(prediction);
 
     while (
-      predictionResponse.status === "pending"
+      prediction.status !== "succeeded" &&
+      prediction.status !== "failed"
     ) {
       await sleep(1000);
-      const pollResponse = await fetch("/api/predictions/" + predictionResponse.id);
-      predictionResponse = await pollResponse.json() as Prediction;
-      if (pollResponse.status !== 200) {
-        setError(predictionResponse.detail || "Failed to fetch status");
+      const response = await fetch("/api/predictions/" + prediction.id);
+      prediction = await response.json();
+      if (response.status !== 200) {
+        setError(prediction.detail);
         return;
       }
-      console.log({ prediction: predictionResponse });
-      setPrediction(predictionResponse);
+      console.log({prediction})
+      setPrediction(prediction);
     }
   };
 
@@ -94,6 +79,4 @@ const Home: React.FC = () => {
       )}
     </div>
   );
-};
-
-export default Home;
+}

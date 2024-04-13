@@ -1,6 +1,6 @@
-export async function POST(req:Request, { params }: { params: { slug: string }}) {
+export async function POST(req:Request, { params }: { params: { id: string }}) {
   const response = await fetch(
-    "https://api.replicate.com/v1/predictions/" + params.slug,
+    "https://api.replicate.com/v1/predictions/" + params.id,
     {
       headers: {
         Authorization: `Bearer ${process.env.REPLICATE_API_TOKEN}`,
