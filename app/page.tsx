@@ -1,10 +1,10 @@
-'use client';
+"use client";
 import { useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const sleep = (ms : number) => new Promise((r) => setTimeout(r, ms));
 
 export default function Home() {
   const [prediction, setPrediction] = useState(null);
@@ -27,19 +27,21 @@ export default function Home() {
       return;
     }
     setPrediction(prediction);
+    console.log({ prediction });
 
     while (
       prediction.status !== "succeeded" &&
       prediction.status !== "failed"
     ) {
       await sleep(1000);
-      const response = await fetch("/api/predictions/" + prediction.id);
-      prediction = await response.json();
+      const response = await fetch("/api/predictions/" + prediction.id, { cache: 'no-store' });
+      prediction = await response.json()
       if (response.status !== 200) {
         setError(prediction.detail);
         return;
       }
-      console.log({prediction})
+      console.log("polling");
+      console.log(prediction);
       setPrediction(prediction);
     }
   };
@@ -56,7 +58,11 @@ export default function Home() {
       </p>
 
       <form className={styles.form} onSubmit={handleSubmit}>
-        <input type="text" name="prompt" placeholder="Enter a prompt to display an image" />
+        <input
+          type="text"
+          name="prompt"
+          placeholder="Enter a prompt to display an image"
+        />
         <button type="submit">Go!</button>
       </form>
 
@@ -64,17 +70,17 @@ export default function Home() {
 
       {prediction && (
         <div>
-            {prediction.output && (
-              <div className={styles.imageWrapper}>
+          {prediction.output && (
+            <div className={styles.imageWrapper}>
               <Image
                 fill
                 src={prediction.output[prediction.output.length - 1]}
                 alt="output"
-                sizes='100vw'
+                sizes="100vw"
               />
-              </div>
-            )}
-            <p>status: {prediction.status}</p>
+            </div>
+          )}
+          <p>status: {prediction.status}</p>
         </div>
       )}
     </div>
