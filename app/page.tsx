@@ -1,24 +1,34 @@
 "use client";
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 
-const sleep = (ms : number) => new Promise((r) => setTimeout(r, ms));
+interface PredictionResponse {
+  id?: string;
+  status?: "succeeded" | "failed";
+  output?: string[];
+  detail?: string;
+}
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export default function Home() {
-  const [prediction, setPrediction] = useState(null);
-  const [error, setError] = useState(null);
+  const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const target = e.target as typeof e.target & {
+      prompt: { value: string };
+    };
     const response = await fetch("/api/predictions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt: e.target.prompt.value,
+        prompt: target.prompt.value,
       }),
     });
     let prediction = await response.json();
@@ -34,8 +44,10 @@ export default function Home() {
       prediction.status !== "failed"
     ) {
       await sleep(1000);
-      const response = await fetch("/api/predictions/" + prediction.id, { cache: 'no-store' });
-      prediction = await response.json()
+      const response = await fetch("/api/predictions/" + prediction.id, {
+        cache: "no-store",
+      });
+      prediction = await response.json();
       if (response.status !== 200) {
         setError(prediction.detail);
         return;
