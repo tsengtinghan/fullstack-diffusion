@@ -24,7 +24,7 @@ interface WordResponse {
 
 async function pollPrediction(predictionId: string) {
   let attempts = 0;
-  const maxAttempts = 600;
+  const maxAttempts = 300;
   while (true) {
     attempts++;
     if (attempts > maxAttempts) {
@@ -39,6 +39,7 @@ async function pollPrediction(predictionId: string) {
 
     const prediction = await response.json();
     console.log(prediction.status);
+    console.log(prediction);
     if (response.status !== 200) {
       throw new Error(`Polling error: ${prediction.detail}`);
     }
@@ -178,6 +179,9 @@ export default function Home() {
           </div>
         </CardContent>
       </Card>
+      <p> image generation can take up to 10s... 
+        Stop generating image after I run out of free credits.
+      </p>
 
       {error && <div>{error}</div>}
     </div>
