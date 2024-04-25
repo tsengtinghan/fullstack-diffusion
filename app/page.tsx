@@ -158,7 +158,7 @@ export default function Home() {
         <CardHeader>
           <CardTitle>{wordState?.word}</CardTitle>
         </CardHeader>
-        <CardContent className="grid w-full items-center gap-1">
+        <CardContent className="grid w-full items-center gap-2">
           <Label htmlFor="Definition" className="font-bold">
             Definition
           </Label>
@@ -167,12 +167,14 @@ export default function Home() {
             Example Sentence
           </Label>
           <p className="text-sm">{wordState?.example}</p>
+          
           <Image
-            src="https://replicate.delivery/pbxt/Nv4mzfPIfWoLAk3nd156cubvvF4tq7NM1aQgzekX1dTy60blA/out-0.png"
+            src={prediction && prediction.output ? prediction.output[prediction.output.length - 1] : "/auspicious.png"}
             alt="word"
             width={300}
             height={300}
           />
+          
         </CardContent>
       </Card>
 
@@ -187,6 +189,7 @@ export default function Home() {
                 src={prediction.output[prediction.output.length - 1]}
                 alt="Generated Image"
                 sizes="50vw"
+                className="pt-4"
               />
             </div>
           )}
