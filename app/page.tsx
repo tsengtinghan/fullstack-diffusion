@@ -24,7 +24,7 @@ interface WordResponse {
 
 async function pollPrediction(predictionId: string) {
   let attempts = 0;
-  const maxAttempts = 300;
+  const maxAttempts = 600;
   while (true) {
     attempts++;
     if (attempts > maxAttempts) {
@@ -62,6 +62,7 @@ export default function Home() {
     example:
       "The clear skies on the morning of our outdoor event were an auspicious sign for a successful day.",
   });
+
 
   const [error, setError] = useState<string | null>(null);
 
@@ -164,21 +165,16 @@ export default function Home() {
           <p className="text-sm">{wordState?.example}</p>
 
           <div className="overflow-hidden rounded-md">
-            {prediction && (
-              <>
-                <Image
-                  src={
-                    prediction.output
-                      ? prediction.output[prediction.output.length - 1]
-                      : "/auspicious.png"
-                  }
-                  alt="word"
-                  width={300}
-                  height={300}
-                />
-                <p>image generation status: {prediction.status}</p>
-              </>
-            )}
+            <Image
+              src={
+                prediction && prediction.output
+                  ? prediction.output[prediction.output.length - 1]
+                  : "/auspicious.png"
+              }
+              alt="word"
+              width={300}
+              height={300}
+            />
           </div>
         </CardContent>
       </Card>
