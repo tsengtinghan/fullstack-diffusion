@@ -71,7 +71,11 @@ export default function Home() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ prompt: target.prompt.value })
         }),
-        fetch("/api/getword")
+        fetch("/api/getword", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: target.prompt.value })
+        }),
       ]);
   
       let predictionJson = await predictionResponse.json();
@@ -91,7 +95,7 @@ export default function Home() {
       setWord(wordJson); 
 
       console.log({ prediction, wordState});
-      
+
       if (prediction && prediction.id) {
         predictionJson = await pollPrediction(prediction.id);
         setPrediction(predictionJson);
