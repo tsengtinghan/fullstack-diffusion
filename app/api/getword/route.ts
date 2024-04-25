@@ -30,5 +30,5 @@ export async function POST(req: Request) {
   console.log(completion.choices[0].message.content);
   const theResponse = completion.choices[0].message.content;
 
-  return Response.json(theResponse , { status: 200 });
+  return new Response(JSON.stringify(theResponse) , { status: 200 });
 }

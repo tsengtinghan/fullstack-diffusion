@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@radix-ui/react-label";
+import { type } from "os";
 
 interface PredictionResponse {
   id?: string;
@@ -15,7 +16,7 @@ interface PredictionResponse {
   detail?: string;
 }
 
-interface WordResponse { 
+interface WordResponse {
   word: string;
   definition: string;
   example: string;
@@ -23,14 +24,14 @@ interface WordResponse {
 
 async function pollPrediction(predictionId: string) {
   let attempts = 0;
-  const maxAttempts = 300; 
+  const maxAttempts = 300;
   while (true) {
     attempts++;
     if (attempts > maxAttempts) {
       throw new Error("Max polling attempts reached.");
     }
 
-    await sleep(1000); 
+    await sleep(1000);
 
     const response = await fetch(`/api/predictions/${predictionId}`, {
       cache: "no-store",
@@ -54,19 +55,19 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export default function Home() {
   const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
-  const [wordState, setWord] = useState<WordResponse | null>(
-    {
-      word: "Auspicous",
-      definition: "Conducive to success; favorable or giving or being a sign of future success.",
-      example: "The clear skies on the morning of our outdoor event were an auspicious sign for a successful day."
-    }
-  );
+  const [wordState, setWord] = useState<WordResponse | null>({
+    word: "Auspicous",
+    definition:
+      "Conducive to success; favorable or giving or being a sign of future success.",
+    example:
+      "The clear skies on the morning of our outdoor event were an auspicious sign for a successful day.",
+  });
   useEffect(() => {
-    console.log('Updated wordState:', wordState);
-    console.log('Updated prediction:', prediction);
-    console.log('check for wordJson', wordState?.definition, wordState?.example, wordState?.word);
+    console.log("Updated wordState:", wordState);
+    console.log("Updated prediction:", prediction);
+    console.log("check for wordJson", wordState?.definition, typeof wordState);
   }, [wordState, prediction]);
-  
+
   const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -74,53 +75,55 @@ export default function Home() {
     const target = e.target as typeof e.target & {
       prompt: { value: string };
     };
-  
+
     try {
       // Parallel requests
       const [predictionResponse, wordResponse] = await Promise.all([
         fetch("/api/predictions", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt: target.prompt.value })
+          body: JSON.stringify({ prompt: target.prompt.value }),
         }),
         fetch("/api/getword", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt: target.prompt.value })
+          body: JSON.stringify({ prompt: target.prompt.value }),
         }),
       ]);
-  
+
       let predictionJson = await predictionResponse.json();
-      const wordJson = await wordResponse.json();
-  
+      const wordText = await wordResponse.text(); // Get the response as text first to log it
+      console.log("Raw response text:", wordText); // This will show exactly what the server sent
+      const wordJson = JSON.parse(wordText);
+
       if (predictionResponse.status !== 201) {
         setError(`Prediction error: ${predictionJson.detail}`);
         return;
       }
-  
+
       if (wordResponse.status !== 200) {
         setError(`Word fetch error: ${wordJson.detail}`);
         return;
       }
-  
+
       setPrediction(predictionJson);
-      setWord(wordJson); 
+      setWord(wordJson);
       console.log(predictionJson, prediction);
       console.log(wordJson, wordState);
 
-
       if (predictionJson && predictionJson.id) {
-        console.log('Polling started...');
+        console.log("Polling started...");
         const finalPrediction = await pollPrediction(predictionJson.id);
         setPrediction(finalPrediction);
-      }      
-  
+      }
     } catch (error) {
-      setError('An unexpected error occurred.');
-      console.error('Error during the prediction and word fetch process:', error);
+      setError("An unexpected error occurred.");
+      console.error(
+        "Error during the prediction and word fetch process:",
+        error
+      );
     }
   }
-  
 
   return (
     <div className="p-8 text-lg max-w-4xl mx-auto">
@@ -159,15 +162,11 @@ export default function Home() {
           <Label htmlFor="Definition" className="font-bold">
             Definition
           </Label>
-          <p className="text-sm">
-            {wordState?.definition}
-          </p>
+          <p className="text-sm">{wordState?.definition}</p>
           <Label htmlFor="Example Sentence" className="font-bold">
             Example Sentence
           </Label>
-          <p className="text-sm">
-            {wordState?.example}
-          </p>
+          <p className="text-sm">{wordState?.example}</p>
           <Image
             src="https://replicate.delivery/pbxt/Nv4mzfPIfWoLAk3nd156cubvvF4tq7NM1aQgzekX1dTy60blA/out-0.png"
             alt="word"
