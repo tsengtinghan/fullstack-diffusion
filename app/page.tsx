@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { Card, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@radix-ui/react-label";
 
 interface PredictionResponse {
@@ -67,7 +67,7 @@ export default function Home() {
       <Head>
         <title>Replicate + Next.js</title>
       </Head>
-  
+
       <p>
         Dream something with{" "}
         <Link href="https://replicate.com/stability-ai/stable-diffusion">
@@ -75,29 +75,54 @@ export default function Home() {
         </Link>
         :
       </p>
-  
+
       <form className="flex mb-8" onSubmit={handleSubmit}>
-        <input 
-          type="text" 
-          name="prompt" 
-          placeholder="Enter a word" 
+        <input
+          type="text"
+          name="prompt"
+          placeholder="Enter a word"
           className="flex-1 p-4 border border-black rounded-sm text-base mr-4 text-gray-800"
         />
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           className="p-4 rounded-sm cursor-pointer text-lg bg-blue-500 hover:bg-blue-600 text-white"
         >
           Go!
         </button>
       </form>
-  
-      <Card>
-        <CardHeader>Word</CardHeader>
-        <Label htmlFor="Definition">Definition</Label>
+
+      <Card className="w-[350px]">
+        <CardHeader>
+          <CardTitle>Word</CardTitle>
+        </CardHeader>
+        <CardContent className="grid w-full items-center gap-1">
+          <Label htmlFor="Definition" className="font-bold">
+            Definition
+          </Label>
+          <p className="text-sm">
+            The word "auspicious" is an adjective that means conducive to
+            success; favorable or giving or being a sign of future success. It
+            is often used to describe situations, events, or times that seem
+            likely to produce a positive outcome.
+          </p>
+          <Label htmlFor="Example Sentence" className="font-bold">
+            Example Sentence
+          </Label>
+          <p className="text-sm">
+            The clear skies on the morning of our outdoor event were an
+            auspicious sign for a successful day.
+          </p>
+          <Image
+            src="https://replicate.delivery/pbxt/Nv4mzfPIfWoLAk3nd156cubvvF4tq7NM1aQgzekX1dTy60blA/out-0.png"
+            alt="word"
+            width={300}
+            height={300}
+          />
+        </CardContent>
       </Card>
-  
+
       {error && <div>{error}</div>}
-  
+
       {prediction && (
         <div>
           {prediction.output && (
