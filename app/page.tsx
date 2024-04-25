@@ -63,11 +63,11 @@ export default function Home() {
   };
 
   return (
-    <div className={styles.container}>
+    <div className="p-8 text-lg max-w-4xl mx-auto">
       <Head>
         <title>Replicate + Next.js</title>
       </Head>
-
+  
       <p>
         Dream something with{" "}
         <Link href="https://replicate.com/stability-ai/stable-diffusion">
@@ -75,28 +75,37 @@ export default function Home() {
         </Link>
         :
       </p>
-
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <Input type="text" name="prompt" placeholder="Enter a word" />
-        <Button type="submit">Go!</Button>
+  
+      <form className="flex mb-8" onSubmit={handleSubmit}>
+        <input 
+          type="text" 
+          name="prompt" 
+          placeholder="Enter a word" 
+          className="flex-1 p-4 border border-black rounded-sm text-base mr-4 text-gray-800"
+        />
+        <button 
+          type="submit" 
+          className="p-4 rounded-sm cursor-pointer text-lg bg-blue-500 hover:bg-blue-600 text-white"
+        >
+          Go!
+        </button>
       </form>
+  
       <Card>
         <CardHeader>Word</CardHeader>
-        <Label htmlFor="Definition">
-          Definition
-        </Label>
+        <Label htmlFor="Definition">Definition</Label>
       </Card>
-
+  
       {error && <div>{error}</div>}
-
+  
       {prediction && (
         <div>
           {prediction.output && (
-            <div className={styles.imageWrapper}>
+            <div className="w-full relative aspect-square">
               <Image
                 fill
                 src={prediction.output[prediction.output.length - 1]}
-                alt="50vh"
+                alt="Generated Image"
                 sizes="50vw"
               />
             </div>
