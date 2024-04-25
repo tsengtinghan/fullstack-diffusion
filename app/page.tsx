@@ -2,11 +2,11 @@
 import { useState, FormEvent } from "react";
 import Head from "next/head";
 import Image from "next/image";
-import styles from "../styles/Home.module.css";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { Card } from "@/components/ui/card";
+import { Card, CardHeader } from "@/components/ui/card";
+import { Label } from "@radix-ui/react-label";
 
 interface PredictionResponse {
   id?: string;
@@ -70,18 +70,22 @@ export default function Home() {
 
       <p>
         Dream something with{" "}
-        <Link href="https://replicate.com/stability-ai/stable-diffusion">SDXL</Link>:
+        <Link href="https://replicate.com/stability-ai/stable-diffusion">
+          SDXL
+        </Link>
+        :
       </p>
 
       <form className={styles.form} onSubmit={handleSubmit}>
-        <Input
-          type="text"
-          name="prompt"
-          placeholder="Enter a word"
-        />
+        <Input type="text" name="prompt" placeholder="Enter a word" />
         <Button type="submit">Go!</Button>
       </form>
-      <Card>Test</Card>
+      <Card>
+        <CardHeader>Word</CardHeader>
+        <Label htmlFor="Definition">
+          Definition
+        </Label>
+      </Card>
 
       {error && <div>{error}</div>}
 
