@@ -1,5 +1,5 @@
 "use client";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -18,26 +18,26 @@ interface PredictionResponse {
 interface WordResponse { 
   word: string;
   definition: string;
-  exampleSentence: string;
+  example: string;
 }
 
 async function pollPrediction(predictionId: string) {
   let attempts = 0;
-  const maxAttempts = 10; // Adjust the number of retries as necessary
+  const maxAttempts = 300; 
   while (true) {
     attempts++;
     if (attempts > maxAttempts) {
       throw new Error("Max polling attempts reached.");
     }
 
-    await sleep(1000); // Sleep before making another request
+    await sleep(1000); 
 
     const response = await fetch(`/api/predictions/${predictionId}`, {
       cache: "no-store",
     });
 
     const prediction = await response.json();
-
+    console.log(prediction.status);
     if (response.status !== 200) {
       throw new Error(`Polling error: ${prediction.detail}`);
     }
@@ -54,7 +54,19 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export default function Home() {
   const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
-  const [wordState, setWord] = useState<WordResponse | null>(null);
+  const [wordState, setWord] = useState<WordResponse | null>(
+    {
+      word: "Auspicous",
+      definition: "Conducive to success; favorable or giving or being a sign of future success.",
+      example: "The clear skies on the morning of our outdoor event were an auspicious sign for a successful day."
+    }
+  );
+  useEffect(() => {
+    console.log('Updated wordState:', wordState);
+    console.log('Updated prediction:', prediction);
+    console.log('check for wordJson', wordState?.definition, wordState?.example, wordState?.word);
+  }, [wordState, prediction]);
+  
   const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -93,14 +105,15 @@ export default function Home() {
   
       setPrediction(predictionJson);
       setWord(wordJson); 
+      console.log(predictionJson, prediction);
+      console.log(wordJson, wordState);
 
-      console.log({ prediction, wordState});
 
-      if (prediction && prediction.id) {
-        predictionJson = await pollPrediction(prediction.id);
-        setPrediction(predictionJson);
-      }
-      
+      if (predictionJson && predictionJson.id) {
+        console.log('Polling started...');
+        const finalPrediction = await pollPrediction(predictionJson.id);
+        setPrediction(finalPrediction);
+      }      
   
     } catch (error) {
       setError('An unexpected error occurred.');
@@ -140,24 +153,20 @@ export default function Home() {
 
       <Card className="w-[350px]">
         <CardHeader>
-          <CardTitle>Word</CardTitle>
+          <CardTitle>{wordState?.word}</CardTitle>
         </CardHeader>
         <CardContent className="grid w-full items-center gap-1">
           <Label htmlFor="Definition" className="font-bold">
             Definition
           </Label>
           <p className="text-sm">
-            The word "auspicious" is an adjective that means conducive to
-            success; favorable or giving or being a sign of future success. It
-            is often used to describe situations, events, or times that seem
-            likely to produce a positive outcome.
+            {wordState?.definition}
           </p>
           <Label htmlFor="Example Sentence" className="font-bold">
             Example Sentence
           </Label>
           <p className="text-sm">
-            The clear skies on the morning of our outdoor event were an
-            auspicious sign for a successful day.
+            {wordState?.example}
           </p>
           <Image
             src="https://replicate.delivery/pbxt/Nv4mzfPIfWoLAk3nd156cubvvF4tq7NM1aQgzekX1dTy60blA/out-0.png"
