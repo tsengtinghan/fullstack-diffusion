@@ -15,10 +15,46 @@ interface PredictionResponse {
   detail?: string;
 }
 
+interface WordResponse { 
+  word: string;
+  definition: string;
+  exampleSentence: string;
+}
+
+async function pollPrediction(predictionId: string) {
+  let attempts = 0;
+  const maxAttempts = 10; // Adjust the number of retries as necessary
+  while (true) {
+    attempts++;
+    if (attempts > maxAttempts) {
+      throw new Error("Max polling attempts reached.");
+    }
+
+    await sleep(1000); // Sleep before making another request
+
+    const response = await fetch(`/api/predictions/${predictionId}`, {
+      cache: "no-store",
+    });
+
+    const prediction = await response.json();
+
+    if (response.status !== 200) {
+      throw new Error(`Polling error: ${prediction.detail}`);
+    }
+
+    if (prediction.status === "succeeded" || prediction.status === "failed") {
+      return prediction;
+    }
+
+    console.log("Polling...");
+  }
+}
+
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export default function Home() {
   const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
+  const [wordRes, setWord] = useState<WordResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {

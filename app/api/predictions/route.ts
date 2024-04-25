@@ -7,6 +7,7 @@ const replicate = new Replicate({
 export async function POST(req: Request) {
 
   const { prompt } = await req.json();
+  const promptForOpenAI = prompt;
   if (!process.env.REPLICATE_API_TOKEN) {
     throw new Error(
       "The REPLICATE_API_TOKEN environment variable is not set. See README.md for instructions on how to set it."
