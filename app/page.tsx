@@ -54,49 +54,56 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export default function Home() {
   const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
-  const [wordRes, setWord] = useState<WordResponse | null>(null);
+  const [wordState, setWord] = useState<WordResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const target = e.target as typeof e.target & {
       prompt: { value: string };
     };
-    const response = await fetch("/api/predictions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        prompt: target.prompt.value,
-      }),
-    });
-    let prediction = await response.json();
-    if (response.status !== 201) {
-      setError(prediction.detail);
-      return;
-    }
-    setPrediction(prediction);
-    console.log({ prediction });
-
-    while (
-      prediction.status !== "succeeded" &&
-      prediction.status !== "failed"
-    ) {
-      await sleep(1000);
-      const response = await fetch("/api/predictions/" + prediction.id, {
-        cache: "no-store",
-      });
-      prediction = await response.json();
-      if (response.status !== 200) {
-        setError(prediction.detail);
+  
+    try {
+      // Parallel requests
+      const [predictionResponse, wordResponse] = await Promise.all([
+        fetch("/api/predictions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: target.prompt.value })
+        }),
+        fetch("/api/getword")
+      ]);
+  
+      let predictionJson = await predictionResponse.json();
+      const wordJson = await wordResponse.json();
+  
+      if (predictionResponse.status !== 201) {
+        setError(`Prediction error: ${predictionJson.detail}`);
         return;
       }
-      console.log("polling");
-      console.log(prediction);
-      setPrediction(prediction);
+  
+      if (wordResponse.status !== 200) {
+        setError(`Word fetch error: ${wordJson.detail}`);
+        return;
+      }
+  
+      setPrediction(predictionJson);
+      setWord(wordJson); 
+
+      console.log({ prediction, wordState});
+      
+      if (prediction && prediction.id) {
+        predictionJson = await pollPrediction(prediction.id);
+        setPrediction(predictionJson);
+      }
+      
+  
+    } catch (error) {
+      setError('An unexpected error occurred.');
+      console.error('Error during the prediction and word fetch process:', error);
     }
-  };
+  }
+  
 
   return (
     <div className="p-8 text-lg max-w-4xl mx-auto">
