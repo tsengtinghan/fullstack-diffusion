@@ -167,35 +167,23 @@ export default function Home() {
             Example Sentence
           </Label>
           <p className="text-sm">{wordState?.example}</p>
-          
-          <Image
-            src={prediction && prediction.output ? prediction.output[prediction.output.length - 1] : "/auspicious.png"}
-            alt="word"
-            width={300}
-            height={300}
-          />
-          
+
+          <div className="overflow-hidden rounded-md">
+            <Image
+              src={
+                prediction && prediction.output
+                  ? prediction.output[prediction.output.length - 1]
+                  : "/auspicious.png"
+              }
+              alt="word"
+              width={300}
+              height={300}
+            />
+          </div>
         </CardContent>
       </Card>
 
       {error && <div>{error}</div>}
-
-      {prediction && (
-        <div>
-          {prediction.output && (
-            <div className="w-full relative aspect-square">
-              <Image
-                fill
-                src={prediction.output[prediction.output.length - 1]}
-                alt="Generated Image"
-                sizes="50vw"
-                className="pt-4"
-              />
-            </div>
-          )}
-          <p>status: {prediction.status}</p>
-        </div>
-      )}
     </div>
   );
 }
