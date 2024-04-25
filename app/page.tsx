@@ -3,6 +3,10 @@ import { useState, FormEvent } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
+import { Card } from "@/components/ui/card";
 
 interface PredictionResponse {
   id?: string;
@@ -66,17 +70,18 @@ export default function Home() {
 
       <p>
         Dream something with{" "}
-        <a href="https://replicate.com/stability-ai/stable-diffusion">SDXL</a>:
+        <Link href="https://replicate.com/stability-ai/stable-diffusion">SDXL</Link>:
       </p>
 
       <form className={styles.form} onSubmit={handleSubmit}>
-        <input
+        <Input
           type="text"
           name="prompt"
-          placeholder="Enter a prompt to display an image"
+          placeholder="Enter a word"
         />
-        <button type="submit">Go!</button>
+        <Button type="submit">Go!</Button>
       </form>
+      <Card>Test</Card>
 
       {error && <div>{error}</div>}
 
@@ -87,8 +92,8 @@ export default function Home() {
               <Image
                 fill
                 src={prediction.output[prediction.output.length - 1]}
-                alt="output"
-                sizes="100vw"
+                alt="50vh"
+                sizes="50vw"
               />
             </div>
           )}
