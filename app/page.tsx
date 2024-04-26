@@ -14,6 +14,7 @@ interface PredictionResponse {
   status?: "succeeded" | "failed";
   output?: string[];
   detail?: string;
+  logs?: string;
 }
 
 interface WordResponse {
@@ -63,7 +64,6 @@ export default function Home() {
     example:
       "The clear skies on the morning of our outdoor event were an auspicious sign for a successful day.",
   });
-
 
   const [error, setError] = useState<string | null>(null);
 
@@ -179,8 +179,11 @@ export default function Home() {
           </div>
         </CardContent>
       </Card>
-      <p> image generation can take up to 10s... 
-        Stop generating image after I run out of free credits.
+      {prediction && <div className="text-sky-600">{prediction.status}</div>}
+      <p>
+        {" "}
+        image generation can take up to 10s... Stop generating image after I run
+        out of free credits.
       </p>
 
       {error && <div>{error}</div>}
