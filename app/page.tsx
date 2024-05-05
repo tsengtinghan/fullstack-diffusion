@@ -23,6 +23,14 @@ interface WordResponse {
   example: string;
 }
 
+interface WordWithUrl extends WordResponse {
+  url: string;
+}
+
+interface WordListResponse {
+  words: WordWithUrl[];
+}
+
 async function pollPrediction(predictionId: string) {
   let attempts = 0;
   const maxAttempts = 300;
@@ -53,9 +61,26 @@ async function pollPrediction(predictionId: string) {
   }
 }
 
+async function getWordList() : Promise<WordListResponse>{
+  const response = await fetch("/api/getwordlist", {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  const wordList = await response.json();
+  return wordList;
+}
+
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export default function Home() {
+  const [wordList, setWordList] = useState<WordListResponse | null>(null);
+  useEffect(() => {
+    getWordList().then((wordList) => {
+      setWordList(wordList)
+      console.log(wordList);
+    });
+  }, []);
+  
   const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
   const [wordState, setWord] = useState<WordResponse | null>({
     word: "Auspicous",
