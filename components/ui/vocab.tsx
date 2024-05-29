@@ -17,7 +17,7 @@ interface Prediction {
 }
 
 
-export default function Vocab({ wordState, prediction }: { wordState: WordState; prediction: Prediction }) {
+export default function Vocab({ wordState, prediction }: { wordState: WordState; prediction: Prediction | null}) {
   return (
     <Card className="w-[350px]">
       <CardHeader>

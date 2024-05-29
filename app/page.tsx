@@ -171,7 +171,7 @@ export default function Home() {
         </Button>
       </form>
 
-      {wordState && prediction && (
+      {wordState && (
         <Vocab wordState={wordState} prediction={prediction} />
       )}
 
