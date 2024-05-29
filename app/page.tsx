@@ -153,27 +153,23 @@ export default function Home() {
         <title>Replicate + Next.js</title>
       </Head>
 
-      <p>
-        Dream something with{" "}
-        <Link href="https://replicate.com/stability-ai/stable-diffusion">
-          SDXL
-        </Link>
-        :
+      <p className="pb-4">
+        Add a new word:
       </p>
 
       <form className="flex mb-8" onSubmit={handleSubmit}>
-        <input
+        <Input
           type="text"
           name="prompt"
           placeholder="Enter a word"
           className="flex-1 p-4 border border-black rounded-sm text-base mr-4 text-gray-800"
         />
-        <button
+        <Button
           type="submit"
           className="p-4 rounded-sm cursor-pointer text-lg bg-blue-500 hover:bg-blue-600 text-white"
         >
           Go!
-        </button>
+        </Button>
       </form>
 
       <Card className="w-[350px]">
