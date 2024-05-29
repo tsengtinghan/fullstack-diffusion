@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@radix-ui/react-label";
 import { type } from "os";
+import Vocab from "@/components/ui/vocab";
 
 interface PredictionResponse {
   id?: string;
@@ -61,7 +62,7 @@ async function pollPrediction(predictionId: string) {
   }
 }
 
-async function getWordList() : Promise<WordListResponse>{
+async function getWordList(): Promise<WordListResponse> {
   const response = await fetch("/api/getwordlist", {
     method: "GET",
     headers: { "Content-Type": "application/json" },
@@ -76,11 +77,11 @@ export default function Home() {
   const [wordList, setWordList] = useState<WordListResponse | null>(null);
   useEffect(() => {
     getWordList().then((wordList) => {
-      setWordList(wordList)
+      setWordList(wordList);
       console.log(wordList);
     });
   }, []);
-  
+
   const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
   const [wordState, setWord] = useState<WordResponse | null>({
     word: "Auspicous",
@@ -153,9 +154,7 @@ export default function Home() {
         <title>Replicate + Next.js</title>
       </Head>
 
-      <p className="pb-4">
-        Add a new word:
-      </p>
+      <p className="pb-4">Add a new word:</p>
 
       <form className="flex mb-8" onSubmit={handleSubmit}>
         <Input
@@ -172,34 +171,10 @@ export default function Home() {
         </Button>
       </form>
 
-      <Card className="w-[350px]">
-        <CardHeader>
-          <CardTitle>{wordState?.word}</CardTitle>
-        </CardHeader>
-        <CardContent className="grid w-full items-center gap-2">
-          <Label htmlFor="Definition" className="font-bold">
-            Definition
-          </Label>
-          <p className="text-sm">{wordState?.definition}</p>
-          <Label htmlFor="Example Sentence" className="font-bold">
-            Example Sentence
-          </Label>
-          <p className="text-sm">{wordState?.example}</p>
+      {wordState && prediction && (
+        <Vocab wordState={wordState} prediction={prediction} />
+      )}
 
-          <div className="overflow-hidden rounded-md">
-            <Image
-              src={
-                prediction && prediction.output
-                  ? prediction.output[prediction.output.length - 1]
-                  : "/auspicious.png"
-              }
-              alt="word"
-              width={300}
-              height={300}
-            />
-          </div>
-        </CardContent>
-      </Card>
       {prediction && <div className="text-sky-600">{prediction.status}</div>}
       <p>
         {" "}
