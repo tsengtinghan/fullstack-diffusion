@@ -16,13 +16,8 @@ interface Prediction {
   logs?: string;
 }
 
-interface VocabProps {
-    wordState: WordState;
-    prediction: Prediction;
-}
 
-export default function Vocab(props : VocabProps) {
-  const { wordState, prediction } = props;
+export default function Vocab({ wordState, prediction }: { wordState: WordState; prediction: Prediction }) {
   return (
     <Card className="w-[350px]">
       <CardHeader>
