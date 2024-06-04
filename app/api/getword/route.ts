@@ -1,4 +1,6 @@
 import OpenAI from "openai";
+import { addWord } from "@/actions/addword";
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -30,6 +32,7 @@ export async function POST(req: Request) {
   console.log(completion.choices[0].message.content);
   if(completion.choices[0].message.content) {
     const theResponse = JSON.parse(completion.choices[0].message.content);
+    addWord(1, theResponse.word);
     return new Response(JSON.stringify(theResponse) , { status: 200 });
   }
   

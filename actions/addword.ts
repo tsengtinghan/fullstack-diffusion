@@ -6,3 +6,4 @@ export const addWord = async (id: number, text: string) => {
     word: text,
   });
 };
+

@@ -1,5 +1,5 @@
 "use client";
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent, useEffect, use } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@radix-ui/react-label";
 import { type } from "os";
 import Vocab from "@/components/ui/vocab";
+import { addWord } from "@/actions/addword";
 
 interface PredictionResponse {
   id?: string;
@@ -131,6 +132,7 @@ export default function Home() {
 
       setPrediction(predictionJson);
       setWord(wordJson);
+      
       console.log(predictionJson, prediction);
       console.log(wordJson, wordState);
 
