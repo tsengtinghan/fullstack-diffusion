@@ -1,6 +1,6 @@
 import { integer, text, boolean, pgTable } from "drizzle-orm/pg-core";
 
-export const todo = pgTable("words", {
+export const words = pgTable("words", {
   id: integer("id").primaryKey(),
   word: text("word").notNull(),
 });
