@@ -85,13 +85,7 @@ export default function Home() {
   }, []);
 
   const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
-  const [wordState, setWord] = useState<WordResponse | null>({
-    word: "NaN",
-    definition:
-      "Conducive to success; favorable or giving or being a sign of future success.",
-    example:
-      "The clear skies on the morning of our outdoor event were an auspicious sign for a successful day.",
-  });
+  const [wordState, setWord] = useState<WordResponse | null>(null);
 
   const [error, setError] = useState<string | null>(null);
 

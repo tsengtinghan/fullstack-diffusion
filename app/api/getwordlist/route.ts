@@ -6,6 +6,8 @@ export async function GET(req:Request) {
   const res = Response.json({ 
     words: words.map((word) => ({
       word: word.word,
+      definition: word.definition,
+      example: word.example,
     })),
 }, { status: 200 })
   return res;
