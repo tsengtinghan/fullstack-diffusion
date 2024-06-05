@@ -80,7 +80,7 @@ export default function Home() {
     getWordList().then((wordList) => {
       setWordList(wordList);
       console.log(wordList);
-      setWord(wordList.words[0]); 
+      setWord(wordList.words[0]);
     });
   }, []);
 
@@ -127,7 +127,7 @@ export default function Home() {
 
       setPrediction(predictionJson);
       setWord(wordJson);
-      
+
       console.log(predictionJson, prediction);
       console.log(wordJson, wordState);
 
@@ -168,8 +168,14 @@ export default function Home() {
         </Button>
       </form>
 
-      {wordState && (
-        <Vocab wordState={wordState} prediction={prediction} />
+      {/* {wordState && <Vocab wordState={wordState} prediction={prediction} />} */}
+
+      {wordList && (
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {wordList.words.map((word) => (
+            <Vocab wordState={word} /> 
+          ))}
+        </div>
       )}
 
       {prediction && <div className="text-sky-600">{prediction.status}</div>}
