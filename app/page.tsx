@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@radix-ui/react-label";
 import { type } from "os";
 import Vocab from "@/components/ui/vocab";
-import { addWord } from "@/actions/addword";
+import { addWord } from "@/actions/wordactions";
 
 interface PredictionResponse {
   id?: string;

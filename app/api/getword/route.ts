@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { addWord } from "@/actions/addword";
+import { addWord } from "@/actions/wordactions";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
