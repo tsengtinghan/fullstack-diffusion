@@ -32,7 +32,7 @@ export async function POST(req: Request) {
   console.log(completion.choices[0].message.content);
   if(completion.choices[0].message.content) {
     const theResponse = JSON.parse(completion.choices[0].message.content);
-    addWord(1, theResponse.word);
+    addWord(theResponse.word);
     return new Response(JSON.stringify(theResponse) , { status: 200 });
   }
   
