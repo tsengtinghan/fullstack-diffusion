@@ -80,12 +80,13 @@ export default function Home() {
     getWordList().then((wordList) => {
       setWordList(wordList);
       console.log(wordList);
+      setWord(wordList.words[0]); 
     });
   }, []);
 
   const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
   const [wordState, setWord] = useState<WordResponse | null>({
-    word: "Auspicous",
+    word: "NaN",
     definition:
       "Conducive to success; favorable or giving or being a sign of future success.",
     example:
