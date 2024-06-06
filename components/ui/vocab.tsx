@@ -6,20 +6,12 @@ interface WordState {
   word: string;
   definition: string;
   example: string;
+  url?: string;
 }
 
-interface Prediction {
-  id?: string;
-  status?: "succeeded" | "failed";
-  output?: string[];
-  detail?: string;
-  logs?: string;
-}
-
-
-export default function Vocab({ wordState, prediction }: { wordState: WordState; prediction: Prediction | null}) {
+export default function Vocab({wordState} : {wordState: WordState}) {
   return (
-    <Card className="w-[350px]">
+    <Card className="">
       <CardHeader>
         <CardTitle>{wordState?.word}</CardTitle>
       </CardHeader>
@@ -36,8 +28,8 @@ export default function Vocab({ wordState, prediction }: { wordState: WordState;
         <div className="overflow-hidden rounded-md">
           <Image
             src={
-              prediction && prediction.output
-                ? prediction.output[prediction.output.length - 1]
+              wordState.url
+                ? wordState.url
                 : "/auspicious.png"
             }
             alt="word"
