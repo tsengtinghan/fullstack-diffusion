@@ -9,11 +9,11 @@ export const addWord = async (
   definition: string,
   example: string
 ) => {
-  await db.insert(words).values({
+  return await db.insert(words).values({
     word: text,
     definition: definition,
     example: example,
-  }).returning({ insertedId: words.id });;
+  }).returning();
 };
 
 export const getWords = async () => {

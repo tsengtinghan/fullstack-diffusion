@@ -32,8 +32,8 @@ export async function POST(req: Request) {
   console.log(completion.choices[0].message.content);
   if(completion.choices[0].message.content) {
     const theResponse = JSON.parse(completion.choices[0].message.content);
-    const id = addWord(theResponse.word, theResponse.definition, theResponse.example);
-    theResponse.id = id;
+    const newWord = await addWord(theResponse.word, theResponse.definition, theResponse.example);
+    theResponse.id = newWord[0].id;
     return new Response(JSON.stringify(theResponse) , { status: 200 });
   }
   

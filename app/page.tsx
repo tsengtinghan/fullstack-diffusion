@@ -74,9 +74,9 @@ export default function Home() {
       ]);
 
       let predictionJson = await predictionResponse.json();
-      const wordText = await wordResponse.text(); // Get the response as text first to log it
-      console.log("Raw response text:", wordText);
-      const wordJson = JSON.parse(wordText);
+      const wordJson = await wordResponse.json() // Get the response as text first to log it
+      console.log("Word response: in client", wordJson);
+      
 
       if (predictionResponse.status !== 201) {
         setError(`Prediction error: ${predictionJson.detail}`);
