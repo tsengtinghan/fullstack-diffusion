@@ -4,6 +4,7 @@ import Head from "next/head";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Vocab from "@/components/ui/vocab";
+import { pollPrediction } from "@/actions/replicate_actions";
 
 interface PredictionResponse {
   id?: string;
@@ -27,35 +28,6 @@ interface WordListResponse {
   words: WordWithUrl[];
 }
 
-async function pollPrediction(predictionId: string) {
-  let attempts = 0;
-  const maxAttempts = 300;
-  while (true) {
-    attempts++;
-    if (attempts > maxAttempts) {
-      throw new Error("Max polling attempts reached.");
-    }
-
-    await sleep(1000);
-
-    const response = await fetch(`/api/predictions/${predictionId}`, {
-      cache: "no-store",
-    });
-
-    const prediction = await response.json();
-    console.log(prediction.status);
-    console.log(prediction);
-    if (response.status !== 200) {
-      throw new Error(`Polling error: ${prediction.detail}`);
-    }
-
-    if (prediction.status === "succeeded" || prediction.status === "failed") {
-      return prediction;
-    }
-
-    console.log("Polling...");
-  }
-}
 
 async function getWordList(): Promise<WordListResponse> {
   const response = await fetch("/api/getwordlist", {
@@ -66,7 +38,7 @@ async function getWordList(): Promise<WordListResponse> {
   return wordList;
 }
 
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 
 export default function Home() {
   const [wordList, setWordList] = useState<WordListResponse | null>(null);
