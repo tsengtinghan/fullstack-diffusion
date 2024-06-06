@@ -1,5 +1,7 @@
 import { getWords } from "@/actions/wordactions";
 
+export const revalidate = 0
+
 export async function GET(req:Request) {
   const words = await getWords();
   console.log("api get words: ", words);

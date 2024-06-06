@@ -47,7 +47,6 @@ export default function Home() {
   }, []);
 
   const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
-  const [wordState, setWord] = useState<WordResponse | null>(null);
   const [wordId, setWordId] = useState(null);
 
   const [error, setError] = useState<string | null>(null);
@@ -90,11 +89,9 @@ export default function Home() {
       }
 
       setPrediction(predictionJson);
-      setWord(wordJson);
       setWordId(wordJson.id);
 
       console.log(predictionJson, prediction);
-      console.log(wordJson, wordState);
 
       if (predictionJson && predictionJson.id) {
         console.log("Polling started...");
@@ -110,10 +107,8 @@ export default function Home() {
             imageUrl: finalPrediction.output[0],
           }),
         });
-        getWordList().then((wordList) => {
-          setWordList(wordList);
-          console.log(wordList);
-        });
+        const updatedWordList = await getWordList();
+        setWordList(updatedWordList);
       }
     } catch (error) {
       setError("An unexpected error occurred.");
@@ -147,12 +142,10 @@ export default function Home() {
         </Button>
       </form>
 
-      {/* {wordState && <Vocab wordState={wordState} prediction={prediction} />} */}
-
       {wordList && (
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
           {wordList.words.map((word) => (
-            <Vocab wordState={word} />
+            <Vocab key={word.url} wordState={word} />
           ))}
         </div>
       )}

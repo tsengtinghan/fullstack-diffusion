@@ -1,7 +1,8 @@
 import db from "@/db/drizzle";
 import { words } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { StringifyOptions } from "querystring";
+
+export const revalidate = 0
 
 export const addWord = async (
   text: string,
