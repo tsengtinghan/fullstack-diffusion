@@ -28,7 +28,6 @@ interface WordListResponse {
   words: WordWithUrl[];
 }
 
-
 async function getWordList(): Promise<WordListResponse> {
   const response = await fetch("/api/getwordlist", {
     method: "GET",
@@ -37,8 +36,6 @@ async function getWordList(): Promise<WordListResponse> {
   const wordList = await response.json();
   return wordList;
 }
-
-
 
 export default function Home() {
   const [wordList, setWordList] = useState<WordListResponse | null>(null);
@@ -79,7 +76,7 @@ export default function Home() {
 
       let predictionJson = await predictionResponse.json();
       const wordText = await wordResponse.text(); // Get the response as text first to log it
-      console.log("Raw response text:", wordText); 
+      console.log("Raw response text:", wordText);
       const wordJson = JSON.parse(wordText);
 
       if (predictionResponse.status !== 201) {
@@ -103,7 +100,20 @@ export default function Home() {
         console.log("Polling started...");
         const finalPrediction = await pollPrediction(predictionJson.id);
         setPrediction(finalPrediction);
-
+        await fetch("/api/uploadimage", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: wordId,
+            imageUrl: finalPrediction.output[0],
+          }),
+        });
+        getWordList().then((wordList) => {
+          setWordList(wordList);
+          console.log(wordList);
+        });
       }
     } catch (error) {
       setError("An unexpected error occurred.");
@@ -142,7 +152,7 @@ export default function Home() {
       {wordList && (
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
           {wordList.words.map((word) => (
-            <Vocab wordState={word} /> 
+            <Vocab wordState={word} />
           ))}
         </div>
       )}

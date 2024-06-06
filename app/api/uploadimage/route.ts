@@ -12,8 +12,8 @@ cloudinary.config({
 export async function POST(request: Request) {
     const { id, imageUrl } = await request.json();
     cloudinary.uploader.upload(
-        "https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg",
-        { public_id: "olympic_flag" },
+        imageUrl,
+        { public_id: id },
         function (error, result) {
             if (error){
                 console.log(error);
@@ -24,4 +24,5 @@ export async function POST(request: Request) {
             return new Response(JSON.stringify(result), { status: 200 });
         }
     );
+    return new Response(JSON.stringify({}), { status: 200 });
 }

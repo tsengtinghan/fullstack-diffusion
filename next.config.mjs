@@ -14,8 +14,9 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "placehold.co",
-      },
+      }
     ],
+    domains: ['res.cloudinary.com']
   },
 };
 
