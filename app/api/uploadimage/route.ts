@@ -24,5 +24,5 @@ export async function POST(request: Request) {
             return new Response(JSON.stringify(result), { status: 200 });
         }
     );
-    return new Response(JSON.stringify({}), { status: 200 });
+    return new Response(JSON.stringify({message : "upload succeed"}), { status: 200 });
 }
