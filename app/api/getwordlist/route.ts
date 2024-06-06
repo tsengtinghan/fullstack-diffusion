@@ -8,6 +8,7 @@ export async function GET(req:Request) {
       word: word.word,
       definition: word.definition,
       example: word.example,
+      url: word.url,
     })),
 }, { status: 200 })
   return res;

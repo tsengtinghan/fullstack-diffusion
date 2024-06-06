@@ -51,6 +51,7 @@ export default function Home() {
 
   const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
   const [wordState, setWord] = useState<WordResponse | null>(null);
+  const [wordId, setWordId] = useState(null);
 
   const [error, setError] = useState<string | null>(null);
 
@@ -67,6 +68,7 @@ export default function Home() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ prompt: target.prompt.value }),
+          // improve prompt
         }),
         fetch("/api/getword", {
           method: "POST",
@@ -77,7 +79,7 @@ export default function Home() {
 
       let predictionJson = await predictionResponse.json();
       const wordText = await wordResponse.text(); // Get the response as text first to log it
-      console.log("Raw response text:", wordText); // This will show exactly what the server sent
+      console.log("Raw response text:", wordText); 
       const wordJson = JSON.parse(wordText);
 
       if (predictionResponse.status !== 201) {
@@ -92,6 +94,7 @@ export default function Home() {
 
       setPrediction(predictionJson);
       setWord(wordJson);
+      setWordId(wordJson.id);
 
       console.log(predictionJson, prediction);
       console.log(wordJson, wordState);
@@ -100,6 +103,7 @@ export default function Home() {
         console.log("Polling started...");
         const finalPrediction = await pollPrediction(predictionJson.id);
         setPrediction(finalPrediction);
+
       }
     } catch (error) {
       setError("An unexpected error occurred.");
