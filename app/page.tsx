@@ -1,15 +1,9 @@
 "use client";
 import { useState, FormEvent, useEffect, use } from "react";
 import Head from "next/head";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@radix-ui/react-label";
-import { type } from "os";
 import Vocab from "@/components/ui/vocab";
-import { addWord } from "@/actions/wordactions";
 
 interface PredictionResponse {
   id?: string;
@@ -179,7 +173,7 @@ export default function Home() {
       )}
 
       {prediction && <div className="text-sky-600">{prediction.status}</div>}
-      <p>
+      <p className="mt-5">
         {" "}
         image generation can take up to 10s... Stop generating image after I run
         out of free credits.
