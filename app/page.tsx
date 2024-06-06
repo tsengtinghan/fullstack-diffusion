@@ -74,7 +74,6 @@ export default function Home() {
     getWordList().then((wordList) => {
       setWordList(wordList);
       console.log(wordList);
-      setWord(wordList.words[0]);
     });
   }, []);
 
