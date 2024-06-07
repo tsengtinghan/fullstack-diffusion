@@ -23,6 +23,7 @@ interface WordResponse {
 
 interface WordWithUrl extends WordResponse {
   url: string;
+  isLoading?: boolean;
 }
 
 interface WordListResponse {
@@ -58,6 +59,16 @@ export default function Home() {
       prompt: { value: string };
     };
 
+    const tempWord: WordWithUrl = {
+      word: target.prompt.value,
+      definition: "Loading definition...",
+      example: "Loading example...",
+      url: URL.createObjectURL(new Blob([])), // Placeholder URL, adjust as needed
+      isLoading: true,
+    };
+    setWordList((prevState) => ({
+      words: [...(prevState?.words || []), tempWord],
+    }));
     try {
       // Parallel requests
       const [predictionResponse, wordResponse] = await Promise.all([
@@ -76,6 +87,17 @@ export default function Home() {
 
       let predictionJson = await predictionResponse.json();
       let wordJson = await wordResponse.json();
+      setPrediction(predictionJson);
+
+      setWordList((current) => {
+        return {
+          words: current!.words.map((word) =>
+            word.isLoading && word.word === tempWord.word
+              ? { ...wordJson, url: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDQ2ZTNuenIzYXZ5cXJqMDNydTdrZHg4bGoweTByODlhZ29jeGl6cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/K9GWAtJoaaIy7vSCW8/giphy.gif", isLoading: false } 
+              : word
+          ),
+        };
+      });
 
       getWordList().then((newWordList) => {
         setWordList(newWordList);
@@ -90,8 +112,6 @@ export default function Home() {
         setError(`Word fetch error: ${wordJson.detail}`);
         return;
       }
-
-      setPrediction(predictionJson);
 
       if (predictionJson && predictionJson.id) {
         console.log("Polling started...");
