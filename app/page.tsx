@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Vocab from "@/components/ui/vocab";
 import { pollPrediction } from "@/actions/replicate_actions";
-import Image from "next/image";
+
 
 interface PredictionResponse {
   id?: string;

@@ -112,3 +112,7 @@
   visibility: visible; 
   z-index: 2; 
 }
+
+.front:hover{
+  transform: rotateY(25deg);
+}
