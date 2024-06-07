@@ -19,7 +19,7 @@ export default function Vocab({ wordState }: { wordState: WordState }) {
       onClick={() => setIsFlipped(!isFlipped)}
     >
       <div className="cardContent">
-        <div className="front">
+        <div className="back">
           <div className="overflow-hidden rounded-md">
             <Image
               src={wordState.url ? wordState.url : "/auspicious.png"}
@@ -29,7 +29,7 @@ export default function Vocab({ wordState }: { wordState: WordState }) {
             />
           </div>
         </div>
-        <div className="back">
+        <div className="front">
           <Card>
             <CardHeader>
               <CardTitle>{wordState.word}</CardTitle>
