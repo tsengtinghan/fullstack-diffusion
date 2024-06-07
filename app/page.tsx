@@ -33,6 +33,7 @@ async function getWordList(): Promise<WordListResponse> {
   const response = await fetch("/api/getwordlist", {
     method: "GET",
     headers: { "Content-Type": "application/json" },
+    cache: "no-store",
   });
   const wordList = await response.json();
   return wordList;

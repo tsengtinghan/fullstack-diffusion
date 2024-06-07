@@ -3,8 +3,6 @@ import { words } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { url } from "inspector";
 
-export const revalidate = 0
-
 export const addWord = async (
   text: string,
   definition: string,
