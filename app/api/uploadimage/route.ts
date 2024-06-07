@@ -1,11 +1,11 @@
 import {v2 as cloudinary} from 'cloudinary';
 import { addImageUrl } from '@/actions/wordactions';
           
-cloudinary.config({ 
-  cloud_name: 'dpwxjh6b5', 
-  api_key: '183124557118962', 
-  api_secret: 'YXpHnDK8S1yJBjR3-IAoMhsjDdc' 
-});
+// cloudinary.config({ 
+//   cloud_name: 'dpwxjh6b5', 
+//   api_key: '183124557118962', 
+//   api_secret: 'YXpHnDK8S1yJBjR3-IAoMhsjDdc' 
+// });
 
 // need to put these in env variables
 
