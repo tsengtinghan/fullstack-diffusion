@@ -32,7 +32,7 @@ export async function POST(req: Request) {
   console.log(completion.choices[0].message.content);
   if(completion.choices[0].message.content) {
     const theResponse = JSON.parse(completion.choices[0].message.content);
-    const newWord = await addWord(theResponse.word, theResponse.definition, theResponse.example);
+    const newWord = await addWord(theResponse.word, theResponse.definition, theResponse.example, "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDQ2ZTNuenIzYXZ5cXJqMDNydTdrZHg4bGoweTByODlhZ29jeGl6cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/K9GWAtJoaaIy7vSCW8/giphy.gif");
     theResponse.id = newWord[0].id;
     return new Response(JSON.stringify(theResponse) , { status: 200 });
   }

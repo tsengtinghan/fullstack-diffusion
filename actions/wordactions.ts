@@ -1,18 +1,21 @@
 import db from "@/db/drizzle";
 import { words } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { url } from "inspector";
 
 export const revalidate = 0
 
 export const addWord = async (
   text: string,
   definition: string,
-  example: string
+  example: string,
+  url: string
 ) => {
   return await db.insert(words).values({
     word: text,
     definition: definition,
     example: example,
+    url: url,
   }).returning();
 };
 

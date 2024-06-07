@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Vocab from "@/components/ui/vocab";
 import { pollPrediction } from "@/actions/replicate_actions";
+import Image from "next/image";
 
 interface PredictionResponse {
   id?: string;
@@ -73,8 +74,11 @@ export default function Home() {
       ]);
 
       let predictionJson = await predictionResponse.json();
-      let wordJson = await wordResponse.json() 
-      // Get the response as text first to log it  
+      let wordJson = await wordResponse.json();
+
+      getWordList().then((newWordList) => {
+        setWordList(newWordList);
+      });
 
       if (predictionResponse.status !== 201) {
         setError(`Prediction error: ${predictionJson.detail}`);
@@ -87,9 +91,6 @@ export default function Home() {
       }
 
       setPrediction(predictionJson);
-      console.log("Word id: ", wordJson.id);
-
-      console.log(predictionJson, prediction);
 
       if (predictionJson && predictionJson.id) {
         console.log("Polling started...");

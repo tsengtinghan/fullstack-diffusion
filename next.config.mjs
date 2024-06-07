@@ -16,7 +16,7 @@ const nextConfig = {
         hostname: "placehold.co",
       }
     ],
-    domains: ['res.cloudinary.com']
+    domains: ['res.cloudinary.com', 'i.giphy.com']
   },
 };
 
