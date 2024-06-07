@@ -36,5 +36,4 @@ export async function POST(req: Request) {
     theResponse.id = newWord[0].id;
     return new Response(JSON.stringify(theResponse) , { status: 200 });
   }
-  
 }

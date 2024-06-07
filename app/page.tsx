@@ -47,7 +47,6 @@ export default function Home() {
   }, []);
 
   const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
-  const [wordId, setWordId] = useState(null);
 
   const [error, setError] = useState<string | null>(null);
 
@@ -74,9 +73,8 @@ export default function Home() {
       ]);
 
       let predictionJson = await predictionResponse.json();
-      const wordJson = await wordResponse.json() // Get the response as text first to log it
-      console.log("Word response: in client", wordJson);
-      
+      let wordJson = await wordResponse.json() 
+      // Get the response as text first to log it  
 
       if (predictionResponse.status !== 201) {
         setError(`Prediction error: ${predictionJson.detail}`);
@@ -89,7 +87,7 @@ export default function Home() {
       }
 
       setPrediction(predictionJson);
-      setWordId(wordJson.id);
+      console.log("Word id: ", wordJson.id);
 
       console.log(predictionJson, prediction);
 
@@ -103,7 +101,7 @@ export default function Home() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            id: wordId,
+            id: wordJson.id,
             imageUrl: finalPrediction.output[0],
           }),
         });
