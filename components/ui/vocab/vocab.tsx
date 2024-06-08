@@ -2,6 +2,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@radix-ui/react-label";
+import styles from "./vocab.module.css";
 
 interface WordState {
   word: string;
@@ -15,11 +16,11 @@ export default function Vocab({ wordState }: { wordState: WordState }) {
 
   return (
     <div
-      className={`card ${isFlipped ? "flipped" : ""}`}
+      className={`${isFlipped ? styles.flipped : ""}`}
       onClick={() => setIsFlipped(!isFlipped)}
     >
-      <div className="cardContent">
-        <div className="back">
+      <div className={styles.cardContent}>
+        <div className={styles.back}>
           <div className="overflow-hidden rounded-md">
             <Image
               src={wordState.url ? wordState.url : "/auspicious.png"}
@@ -29,7 +30,7 @@ export default function Vocab({ wordState }: { wordState: WordState }) {
             />
           </div>
         </div>
-        <div className="front">
+        <div className={styles.front}>
           <Card>
             <CardHeader>
               <CardTitle>{wordState.word}</CardTitle>

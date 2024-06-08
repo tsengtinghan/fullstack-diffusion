@@ -3,7 +3,7 @@ import { useState, FormEvent, useEffect, use } from "react";
 import Head from "next/head";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Vocab from "@/components/ui/vocab";
+import Vocab from "@/components/ui/vocab/vocab";
 import { pollPrediction } from "@/actions/replicate_actions";
 
 
