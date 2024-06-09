@@ -5,7 +5,7 @@ This is a web application that helps you to learn new words by generating images
 ## to-do list
 - [x] when image generation finish, call cloundinary api and upload the image, get the id and store the id into the database
 - [x] when db finish storing, refetch wordlist on the client side
-- [] imporve image generation prompt (and model choice?)
-- [] loading image
-- [] flash card style
-- [] migrate to oxford dictionary api to save $$
+- [ ] imporve image generation prompt (and model choice?)
+- [ ] loading image
+- [ ] flash card style
+- [ ] migrate to oxford dictionary api to save $$
